@@ -1,9 +1,11 @@
 #ifndef CONTAINER_H
 #define CONTAINER_H
 
-#include "Vector.h"
+#include <vector>
 
 #define ull unsigned long long int
+
+using namespace std;
 
 /*
 Container Abstract Class
@@ -39,7 +41,7 @@ template <class Object>
 class ArrayBasedContainer : Container
 {
 protected:
-	Vector<Object> elements;
+	vector<Object> elements;
 public:
 	ArrayBasedContainer() : size(0) {};
 	ArrayBasedContainer(ull size)

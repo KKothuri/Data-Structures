@@ -4,12 +4,12 @@ Object-Oriented Implementation in C++ of all Data Structures taught in college c
 ---
 
 Currently Working On:
-- Vector.h
 - Container.h
 
 ---
 
 Completed:
 - Pair.h
+- Vector.h
 
 ---

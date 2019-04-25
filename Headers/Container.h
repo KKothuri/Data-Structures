@@ -16,15 +16,15 @@ class Container
 protected:
 	ull size;
 public:
-	Container() : size(0) {};
+	Container() : size(0) {}
 	virtual class Iterator;
 	virtual void insert(Object& x) = 0;
 	virtual void remove(Object& x) = 0;
 	virtual bool isPresent(Object& x) = 0;
-	virtual Iterator begin();
-	virtual Iterator end();
-	virtual Iterator rbegin();
-	virtual Iterator rend();
+	virtual Iterator begin() = 0;
+	virtual Iterator end() = 0;
+	virtual Iterator rbegin() = 0;
+	virtual Iterator rend() = 0;
 	ull size() { return size; }
 	virtual 
 };
@@ -32,7 +32,7 @@ public:
 /*
 	ArrayBasedContainer Abstract Class
 	Superclass of structures which use arrays as an underlying data structure.
-	Stacks, Queues, Heaps etc.
+	Stacks, Queues, Heaps, Graphs etc.
 */
 template <class Object>
 
@@ -41,7 +41,7 @@ class ArrayBasedContainer : Container
 protected:
 	Vector<Object> elements;
 public:
-	ArrayBasedContainer() : size(0);
+	ArrayBasedContainer() : size(0) {};
 	ArrayBasedContainer(ull size)
 	{
 		try

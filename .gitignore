@@ -37,4 +37,4 @@
 *.json
 
 # VSCode Folders
-vscode/
+/.vscode

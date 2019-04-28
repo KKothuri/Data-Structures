@@ -9,11 +9,11 @@ Currently Working On:
 ---
 
 Completed:
-- Pair.h
 - Vector.h
 
 ---
 
 Tested:
+- Pair.h
 
 ---

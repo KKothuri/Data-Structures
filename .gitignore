@@ -35,3 +35,6 @@
 
 # Properties
 *.json
+
+# VSCode Folders
+vscode/

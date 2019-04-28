@@ -1,8 +1,11 @@
 #include <iostream>
-#include "Pair.h"
-#include "Vector.h"
+#include "../../util/Pair.h"
 int main()
 {
-	Vector<Pair<int, int>> v;
-	v.push_back(makePair(2, 3));
+	Pair<int, int> a, c;
+	a.first = 1;
+	a.second = 2;
+	Pair<int, int> b(a);
+	c = b = a;
+	std::cout << c.first << " " << c.second << " " << (c == a);
 }

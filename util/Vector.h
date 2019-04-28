@@ -3,30 +3,23 @@
 
 #define ull unsigned long long int
 
+#include <iostream>
+
+using namespace std;
+
 //Vector class to mimic the STL vector class
 template <class Object>
 
 class Vector
 {
-public:
-	//Iterator base class
-	class Iterator;
-
-	//ForwardIterator for inorder traversal
-	class ForwardIterator : public Iterator;
-
-	//BackwardIterator for reverse traversal
-	class BackwardIterator : public Iterator;
-private:
 	static const ull maxsize = 4611686018427387903;
 	ull size;
 	Object* elements;
 	ull capacity;
-	static ForwardIterator end = new Object;
-	static BackwardIterator rend = new Object;
+	void allocate(ull size);
 public:
 	Vector() : size(0), capacity(0), elements(NULL) {}
-	Vector(ull size);
+	Vector(ull size) { allocate(size); }
 	Vector(ull size, const Object& init);
 	Vector(const Vector& v);
 	~Vector() { if (elements) delete[] elements; }
@@ -34,139 +27,19 @@ public:
 	bool operator== (const Vector& p2) const;
 	Object& operator[] (ull index);
 	ull max_size() const { return maxsize; }
-	ull size() const { return size; }
-	ull capacity() const { return capacity; }
+	ull Size() const { return size; }
+	ull Capacity() const { return capacity; }
 	void resize(ull size);
 	void push_back(Object& x);
 	void pop_back();
-	void clear() { if (elements) delete[] elements; elements = capacity = size = NULL; }
+	void clear() { if (elements) delete[] elements; elements = NULL; capacity = size = 0; }
 	void erase(ull i);
 	void erase(ull i, ull j);
-	ForwardIterator begin() { return ForwardIterator(elements); }
-	ForwardIterator end() { return end; }
-	BackwardIterator rbegin() { return ForwardIterator(elements + size - 1); }
-	BackwardIterator rend() { return rend; }
 };
 
 template <class Object>
 
-class Vector<Object>::Iterator
-{
-	friend class Vector<Object>;
-protected:
-	Object* ptr;
-	Iterator(Object* p) : ptr(p) {};
-public:
-	Iterator() : ptr(NULL) {}
-	Iterator(Iterator p) { ptr = p.isNull() ? NULL : &(*p) }
-	bool operator== (const Iterator& it2)
-	{
-		return (isNull() && it2.isNull()) || *ptr == *it2;
-	}
-	Iterator& operator= (const Iterator& it)
-	{
-		ptr = it.isNull() ? NULL : &(*p);
-		return *this;
-	}
-	Object* operator->() { return ptr; }
-	Object& operator*();
-	bool isNull() { return ptr; }
-};
-
-template <class Object>
-
-Object& Vector<Object>::Iterator::operator*()
-{
-	try
-	{
-		if (ptr)
-			return *ptr;
-		else throw 1;
-	}
-	catch (int x)
-	{
-		if (x == 1)
-			cout << "NULL Iterator\n";
-	}
-}
-
-//ForwardIterator for inorder traversal
-template <class Object>
-
-class Vector<Object>::ForwardIterator : public Vector<Object>::Iterator
-{
-	friend class Vector<Object>;
-protected:
-	ForwardIterator(Object* p) : Iterator(p) {};
-public:
-	ForwardIterator() : Iterator() {}
-	ForwardIterator(Iterator p) : Iterator(p) {}
-	ForwardIterator& operator= (const Iterator& it)
-	{
-		ptr = it.isNull() ? NULL : &(*p);
-		return *this;
-	}
-	ForwardIterator operator++(int)
-	{
-		ForwardIterator temp = *this;
-		try
-		{
-			if (*ptr == *end)
-				throw 1;
-			if (ptr != elements + size - 1)
-				ptr++;
-			else
-				ptr = &(*end);
-		}
-		catch (int x)
-		{
-			if (x == 1)
-				cout << "Already at end.\n";
-		}
-		return temp;
-	}
-};
-
-//BackwardIterator for reverse traversal
-template <class Object>
-
-class Vector<Object>::BackwardIterator : public Vector<Object>::Iterator
-{
-	friend class Vector<Object>;
-protected:
-	BackwardIterator(Object* p) : Iterator(p) {};
-public:
-	BackwardIterator() : Iterator() {}
-	BackwardIterator(Iterator p) : Iterator(p) {}
-	BackwardIterator& operator= (const Iterator& it)
-	{
-		ptr = it.isNull() ? NULL : &(*p);
-		return *this;
-	}
-	ForwardIterator operator++(int)
-	{
-		ForwardIterator temp = *this;
-		try
-		{
-			if (*ptr == *rend)
-				throw 1;
-			if (ptr != elements)
-				ptr--;
-			else
-				ptr = &(*rend);
-		}
-		catch (int x)
-		{
-			if (x == 1)
-				cout << "Already at rend.\n";
-		}
-		return temp;
-	}
-};
-
-template <class Object>
-
-Vector<Object>::Vector(ull size)
+void Vector<Object>::allocate(ull size)
 {
 	try
 	{
@@ -174,7 +47,7 @@ Vector<Object>::Vector(ull size)
 			throw size;
 		else
 		{
-			this.size = size;
+			this->size = size;
 			capacity = size;
 			elements = capacity ? new Object[capacity] : NULL;
 		}
@@ -182,7 +55,8 @@ Vector<Object>::Vector(ull size)
 	catch (ull x)
 	{
 		cout << "Invalid initialisation size of " << x << " for a Vector.\nInitialising with default constructor.\n";
-		Vector();
+		elements = NULL;
+		size = capacity = 0;
 	}
 }
 
@@ -190,43 +64,28 @@ template <class Object>
 
 Vector<Object>::Vector(ull size, const Object& init)
 {
-	try
-	{
-		if (size < 0)
-			throw size;
-		else
-		{
-			this.size = size;
-			capacity = size;
-			elements = capacity ? new Object[capacity] : NULL;
-			for (ull i = 0; i < capacity; i++)
-				elements[i] = init;
-		}
-	}
-	catch (ull x)
-	{
-		cout << "Invalid initialisation size of " << x << " for a Vector.\nInitialising with default constructor.\n";
-		Vector();
-	}
+	allocate(size);
+	for (ull i = 0; i < capacity; i++)
+		elements[i] = init;
 }
 
 template <class Object>
 
-Vector<Object>::Vector(const Vector& v)
+Vector<Object>::Vector(const Vector<Object>& v)
 {
-	size = v.size;
-	capacity = v.capacity;
+	size = v.Size();
+	capacity = v.Capacity();
 	elements = capacity ? new Object[capacity] : NULL;
 	for (ull i = 0; i < size; i++)
-		element[i] = v[i];
+		elements[i] = v[i];
 }
 
 template <class Object>
 
 Vector<Object>& Vector<Object>::operator= (const Vector<Object>& p)
 {
-	resize(p.size());
-	for (int i = 0; i < p.size(); i++)
+	resize(p.Size());
+	for (int i = 0; i < p.Size(); i++)
 		elements[i] = p[i];
 }
 
@@ -234,7 +93,7 @@ template <class Object>
 
 bool Vector<Object>::operator== (const Vector<Object>& p2) const
 {
-	bool ans = size == p2.size;
+	bool ans = size == p2.Size();
 	for (int i = 0; ans && i < size; i++)
 		ans &= elements[i] == p2[i];
 	return ans;
@@ -261,14 +120,16 @@ template <class Object>
 
 void Vector<Object>::resize(ull size)
 {
+	if(this->size == size)
+		return;
 	capacity = size;
 	Object* temp = capacity ? new Object[capacity] : NULL;
-	for (ull i = 0; i < min(size, this.size); i++)
+	for (ull i = 0; i < min(size, this->size); i++)
 		temp[i] = elements[i];
 	if (elements)
 		delete[] elements;
 	elements = temp;
-	this.size = size;
+	this->size = size;
 }
 
 template <class Object>

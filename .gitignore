@@ -32,3 +32,6 @@
 *.app
 /.vs/Data-Structures/v16
 /.vs
+
+# Properties
+*.json

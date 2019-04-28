@@ -27,10 +27,11 @@ private:
 public:
 	Vector() : size(0), capacity(0), elements(NULL) {}
 	Vector(ull size);
+	Vector(ull size, const Object& init);
 	Vector(const Vector& v);
 	~Vector() { if (elements) delete[] elements; }
-	Vector& operator= (const Vector& p)
-		bool operator== (const Vector& p1, const Vector& p2) const;
+	Vector& operator= (const Vector& p);
+	bool operator== (const Vector& p2) const;
 	Object& operator[] (ull index);
 	ull max_size() const { return maxsize; }
 	ull size() const { return size; }
@@ -58,9 +59,9 @@ protected:
 public:
 	Iterator() : ptr(NULL) {}
 	Iterator(Iterator p) { ptr = p.isNull() ? NULL : &(*p) }
-	bool operator== (const Iterator& it1, const Iterator& it2)
+	bool operator== (const Iterator& it2)
 	{
-		return (it1.isNull() && it2.isNull()) || *it1 == *it2;
+		return (isNull() && it2.isNull()) || *ptr == *it2;
 	}
 	Iterator& operator= (const Iterator& it)
 	{
@@ -105,28 +106,26 @@ public:
 		ptr = it.isNull() ? NULL : &(*p);
 		return *this;
 	}
-	void operator++();
+	ForwardIterator operator++(int)
+	{
+		ForwardIterator temp = *this;
+		try
+		{
+			if (*ptr == *end)
+				throw 1;
+			if (ptr != elements + size - 1)
+				ptr++;
+			else
+				ptr = &(*end);
+		}
+		catch (int x)
+		{
+			if (x == 1)
+				cout << "Already at end.\n";
+		}
+		return temp;
+	}
 };
-
-template <class Object>
-
-void Vector<Object>::ForwardIterator::operator++()
-{
-	try
-	{
-		if (*ptr == *end)
-			throw 1;
-		if (ptr != elements + size - 1)
-			ptr++;
-		else
-			ptr = &(*end);
-	}
-	catch (int x)
-	{
-		if (x == 1)
-			cout << "Already at end.\n";
-	}
-}
 
 //BackwardIterator for reverse traversal
 template <class Object>
@@ -144,28 +143,26 @@ public:
 		ptr = it.isNull() ? NULL : &(*p);
 		return *this;
 	}
-	void operator++();
+	ForwardIterator operator++(int)
+	{
+		ForwardIterator temp = *this;
+		try
+		{
+			if (*ptr == *rend)
+				throw 1;
+			if (ptr != elements)
+				ptr--;
+			else
+				ptr = &(*rend);
+		}
+		catch (int x)
+		{
+			if (x == 1)
+				cout << "Already at rend.\n";
+		}
+		return temp;
+	}
 };
-
-template <class Object>
-
-void Vector<Object>::BackwardIterator::operator++()
-{
-	try
-	{
-		if (*ptr == *rend)
-			throw 1;
-		if (ptr != elements)
-			ptr--;
-		else
-			ptr = &(*rend);
-	}
-	catch (int x)
-	{
-		if (x == 1)
-			cout << "Already at rend.\n";
-	}
-}
 
 template <class Object>
 
@@ -191,6 +188,30 @@ Vector<Object>::Vector(ull size)
 
 template <class Object>
 
+Vector<Object>::Vector(ull size, const Object& init)
+{
+	try
+	{
+		if (size < 0)
+			throw size;
+		else
+		{
+			this.size = size;
+			capacity = size;
+			elements = capacity ? new Object[capacity] : NULL;
+			for (ull i = 0; i < capacity; i++)
+				elements[i] = init;
+		}
+	}
+	catch (ull x)
+	{
+		cout << "Invalid initialisation size of " << x << " for a Vector.\nInitialising with default constructor.\n";
+		Vector();
+	}
+}
+
+template <class Object>
+
 Vector<Object>::Vector(const Vector& v)
 {
 	size = v.size;
@@ -202,7 +223,7 @@ Vector<Object>::Vector(const Vector& v)
 
 template <class Object>
 
-Vector& Vector<Object>::operator= (const Vector& p)
+Vector<Object>& Vector<Object>::operator= (const Vector<Object>& p)
 {
 	resize(p.size());
 	for (int i = 0; i < p.size(); i++)
@@ -211,10 +232,12 @@ Vector& Vector<Object>::operator= (const Vector& p)
 
 template <class Object>
 
-bool Vector<Object>::operator== (const Vector& p1, const Vector& p2) const
+bool Vector<Object>::operator== (const Vector<Object>& p2) const
 {
-	bool ans = p1.size == p2.size;
-	for (int i = 0; i < p1.size(); i++)
+	bool ans = size == p2.size;
+	for (int i = 0; ans && i < size; i++)
+		ans &= elements[i] == p2[i];
+	return ans;
 }
 
 template <class Object>
@@ -293,6 +316,8 @@ void Vector<Object>::pop_back()
 	}
 }
 
+template <class Object>
+
 void Vector<Object>::erase(ull i)
 {
 	try
@@ -309,6 +334,8 @@ void Vector<Object>::erase(ull i)
 			cout << "Index out of Bounds\n";
 	}
 }
+
+template <class Object>
 
 void Vector<Object>::erase(ull i, ull j)
 {

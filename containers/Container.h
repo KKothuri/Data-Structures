@@ -19,16 +19,10 @@ protected:
 	ull size;
 public:
 	Container() : size(0) {}
-	virtual class Iterator;
 	virtual void insert(Object& x) = 0;
 	virtual void remove(Object& x) = 0;
 	virtual bool isPresent(Object& x) = 0;
-	virtual Iterator begin() = 0;
-	virtual Iterator end() = 0;
-	virtual Iterator rbegin() = 0;
-	virtual Iterator rend() = 0;
 	ull size() { return size; }
-	virtual 
 };
 
 /*

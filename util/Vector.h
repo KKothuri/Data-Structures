@@ -103,16 +103,12 @@ template <class Object>
 
 Object& Vector<Object>::operator[] (ull index)
 {
-	try
+	if(index < size)
+		return elements[index];
+	else
 	{
-		if (index >= size)
-			throw index;
-		else return elements[index];
-	}
-	catch (ull x)
-	{
-		cout << "Invalid index " << x << ".\n";
-		Vector();
+		cout << "Invalid index " << index << ".\n";
+		exit(1);
 	}
 }
 

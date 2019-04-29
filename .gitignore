@@ -38,3 +38,7 @@
 
 # VSCode Folders
 /.vscode
+
+# MSVC Compiler
+*.pdb
+*.ilk

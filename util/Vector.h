@@ -70,14 +70,7 @@ Vector<Object>::Vector(ull size, const Object& init)
 
 template <class Object>
 
-Vector<Object>::Vector(const Vector<Object> & v)
-{
-	size = v.Size();
-	capacity = v.Capacity();
-	elements = capacity ? new Object[capacity] : NULL;
-	for (ull i = 0; i < size; i++)
-		elements[i] = v[i];
-}
+Vector<Object>::Vector(const Vector<Object>& v) { *this = v; }
 
 template <class Object>
 

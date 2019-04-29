@@ -11,11 +11,11 @@ Currently Working On:
 ---
 
 Completed:
-- Vector.h
 
 ---
 
 Tested:
 - Pair.h
+- Vector.h
 
 ---

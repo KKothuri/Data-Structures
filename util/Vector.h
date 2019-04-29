@@ -1,11 +1,12 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#define ull unsigned long long int
-
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
+
+using ull = unsigned long long int;
 
 //Vector class to mimic the STL vector class
 template <class Object>
@@ -26,6 +27,7 @@ public:
 	Vector& operator= (const Vector& p);
 	bool operator== (const Vector& p2) const;
 	Object& operator[] (ull index);
+	const Object operator[] (ull index) const;
 	ull max_size() const { return maxsize; }
 	ull Size() const { return size; }
 	ull Capacity() const { return capacity; }
@@ -45,12 +47,9 @@ void Vector<Object>::allocate(ull size)
 	{
 		if (size < 0)
 			throw size;
-		else
-		{
-			this->size = size;
-			capacity = size;
-			elements = capacity ? new Object[capacity] : NULL;
-		}
+		this->size = size;
+		capacity = size;
+		elements = capacity ? new Object[capacity] : NULL;
 	}
 	catch (ull x)
 	{
@@ -71,7 +70,7 @@ Vector<Object>::Vector(ull size, const Object& init)
 
 template <class Object>
 
-Vector<Object>::Vector(const Vector<Object>& v)
+Vector<Object>::Vector(const Vector<Object> & v)
 {
 	size = v.Size();
 	capacity = v.Capacity();
@@ -82,16 +81,17 @@ Vector<Object>::Vector(const Vector<Object>& v)
 
 template <class Object>
 
-Vector<Object>& Vector<Object>::operator= (const Vector<Object>& p)
+Vector<Object>& Vector<Object>::operator= (const Vector<Object> & p)
 {
 	resize(p.Size());
 	for (int i = 0; i < p.Size(); i++)
 		elements[i] = p[i];
+	return *this;
 }
 
 template <class Object>
 
-bool Vector<Object>::operator== (const Vector<Object>& p2) const
+bool Vector<Object>::operator== (const Vector<Object> & p2) const
 {
 	bool ans = size == p2.Size();
 	for (int i = 0; ans && i < size; i++)
@@ -103,7 +103,20 @@ template <class Object>
 
 Object& Vector<Object>::operator[] (ull index)
 {
-	if(index < size)
+	if (index < size)
+		return elements[index];
+	else
+	{
+		cout << "Invalid index " << index << ".\n";
+		exit(1);
+	}
+}
+
+template <class Object>
+
+const Object Vector<Object>::operator[] (ull index) const
+{
+	if (index < size)
 		return elements[index];
 	else
 	{
@@ -116,10 +129,10 @@ template <class Object>
 
 void Vector<Object>::resize(ull size)
 {
-	if(this->size == size)
+	if (this->size == size)
 		return;
 	capacity = size;
-	Object* temp = capacity ? new Object[capacity] : NULL;
+	Object * temp = capacity ? new Object[capacity] : NULL;
 	for (ull i = 0; i < min(size, this->size); i++)
 		temp[i] = elements[i];
 	if (elements)
@@ -130,7 +143,7 @@ void Vector<Object>::resize(ull size)
 
 template <class Object>
 
-void Vector<Object>::push_back(Object& x)
+void Vector<Object>::push_back(Object & x)
 {
 	if (capacity > size)
 		elements[size++] = x;
@@ -210,7 +223,5 @@ void Vector<Object>::erase(ull i, ull j)
 			cout << "Indices out of Bounds\n";
 	}
 }
-
-#undef ull
 
 #endif

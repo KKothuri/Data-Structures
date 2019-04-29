@@ -1,11 +1,15 @@
 #include <iostream>
-#include "../../util/Pair.h"
-#include "../../util/Vector.h"
+#include "Vector.h"
 
 using namespace std;
 
 int main()
 {
-    Vector<int> arr(20, 1);
-    cout << arr[0];
+	Vector<Vector<int>> arr(5, Vector<int>(4, 3));
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 4; j++)
+			cout << arr[i][j] << " ";
+		cout << "\n";
+	}
 }

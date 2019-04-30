@@ -11,12 +11,12 @@ Currently Working On:
 ---
 
 Completed:
-- String.h
 
 ---
 
 Tested:
 - Pair.h
 - Vector.h
+- String.h
 
 ---

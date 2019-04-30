@@ -4,6 +4,7 @@
 #include "Vector.h"
 #include <cstring>
 
+//String class to mimic the STL string class
 class String
 {
 	Vector<char> elements_;

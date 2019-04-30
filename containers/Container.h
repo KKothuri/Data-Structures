@@ -16,13 +16,13 @@ template <class Object>
 class Container
 {
 protected:
-	ull size;
+	ull size_;
 public:
 	Container() : size(0) {}
 	virtual void insert(Object& x) = 0;
 	virtual void remove(Object& x) = 0;
-	virtual bool isPresent(Object& x) = 0;
-	ull size() { return size; }
+	virtual bool isPresent const(Object& x) = 0;
+	ull size() const { return size_; }
 };
 
 /*
@@ -32,30 +32,18 @@ public:
 */
 template <class Object>
 
-class ArrayBasedContainer : Container
+class ArrayBasedContainer : public Container
 {
 protected:
-	vector<Object> elements;
+	vector<Object> elements_;
 public:
-	ArrayBasedContainer() : size(0) {};
+	ArrayBasedContainer() : Container(0) {};
 	ArrayBasedContainer(ull size)
 	{
-		try
-		{
-			if (size < 0)
-				throw size;
-			else
-			{
-				this.size = size;
-				elements.resize(size);
-			}
-		}
-		catch (ull x)
-		{
-			cout << "Invalid initialisation size of " << x << ".\nInitialising with default constructor.\n";
-			ArrayBasedContainer();
-		}
+		size_ = size;
+		elements_.resize(size);
 	}
+	ull capacity() const { return elements_.capacity() };
 };
 
 /*
@@ -65,10 +53,12 @@ public:
 */
 template <class Object>
 
-class NodeBasedContainer : Container
+class NodeBasedContainer : public Container
 {
 protected:
-	virtual class Node {};
+	virtual class Node { Object data; };
+public:
+	NodeBasedContainer() : Container(0) {};
 };
 
 #undef ull

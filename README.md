@@ -18,5 +18,9 @@ Tested:
 - Pair.h
 - Vector.h
 - String.h
+- List.h
+- XORList.h
+- Stack.h
+- Queue.h
 
 ---

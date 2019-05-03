@@ -28,6 +28,8 @@ protected:
 	Node* end;
 public:
 	XORList() : NodeBasedContainer<Object>(), start(NULL), end(NULL) {}
+	Object& operator[] (ull index);
+	const Object operator[] (ull index) const;
 	void insert(const Object& x) { insertEnd(x); }
 	void insertFront(const Object& x);
 	void insertEnd(const Object& x);
@@ -39,6 +41,52 @@ public:
 	void removeBack();
 	bool isPresent (const Object& x) const { return find(x).first; }
 };
+
+template <class Object>
+
+Object& XORList<Object>::operator[] (ull ind)
+{
+	if (ind < this->size_)
+	{
+        Node* prev = NULL;
+        Node* t = start;
+        while (ind-- && (Node *)((uintptr_t)t->ptr ^ (uintptr_t)prev))
+        {
+            Node* p = t;
+            t = (Node *)((uintptr_t)t->ptr ^ (uintptr_t)prev);
+            prev = p;
+        }
+        return t->data;
+	}
+	else
+	{
+		cout << "Invalid index " << ind << ".\n";
+		exit(1);
+	}
+}
+
+template <class Object>
+
+const Object XORList<Object>::operator[] (ull ind) const
+{
+	if (ind < this->size_)
+	{
+        Node* prev = NULL;
+        Node* t = start;
+        while (ind-- && (Node *)((uintptr_t)t->ptr ^ (uintptr_t)prev))
+        {
+            Node* p = t;
+            t = (Node *)((uintptr_t)t->ptr ^ (uintptr_t)prev);
+            prev = p;
+        }
+        return t->data;
+	}
+	else
+	{
+		cout << "Invalid index " << ind << ".\n";
+		exit(1);
+	}
+}
 
 template <class Object>
 

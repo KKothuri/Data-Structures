@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#define ull unsigned long long int
+using ull = unsigned long long int;
 
 using namespace std;
 
@@ -18,10 +18,10 @@ class Container
 protected:
 	ull size_;
 public:
-	Container() : size(0) {}
-	virtual void insert(Object& x) = 0;
-	virtual void remove(Object& x) = 0;
-	virtual bool isPresent const(Object& x) = 0;
+	Container() : size_(0) {}
+	virtual void insert(const Object& x) = 0;
+	virtual void remove(const Object& x) = 0;
+	virtual bool isPresent (const Object& x) const = 0;
 	ull size() const { return size_; }
 };
 
@@ -32,18 +32,18 @@ public:
 */
 template <class Object>
 
-class ArrayBasedContainer : public Container
+class ArrayBasedContainer : public Container<Object>
 {
 protected:
 	vector<Object> elements_;
 public:
-	ArrayBasedContainer() : Container(0) {};
+	ArrayBasedContainer() : Container<Object>() {};
 	ArrayBasedContainer(ull size)
 	{
-		size_ = size;
+		this->size_ = size;
 		elements_.resize(size);
 	}
-	ull capacity() const { return elements_.capacity() };
+	ull capacity() const { return elements_.Capacity(); }
 };
 
 /*
@@ -53,14 +53,15 @@ public:
 */
 template <class Object>
 
-class NodeBasedContainer : public Container
+class NodeBasedContainer : public Container<Object>
 {
 protected:
-	virtual class Node { Object data; };
+	class Node
+	{
+	    Object data;
+	};
 public:
-	NodeBasedContainer() : Container(0) {};
+	NodeBasedContainer() : Container<Object>() {};
 };
-
-#undef ull
 
 #endif

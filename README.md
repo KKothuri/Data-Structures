@@ -11,6 +11,7 @@ Currently Working On:
 ---
 
 Completed:
+- BinarySearchTree.h
 
 ---
 
